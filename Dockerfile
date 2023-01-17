@@ -4,5 +4,6 @@ WORKDIR /something_server
 COPY Gemfile* .
 RUN bundle install
 COPY . .
+RUN rm -rf /something_server/tmp/pids/server.pid
 EXPOSE 4000
 CMD ["rails", "server", "-b", "0.0.0.0"]
