@@ -6,6 +6,4 @@ WORKDIR /something_server
 COPY Gemfile* .
 RUN bundle install
 COPY . .
-RUN rm -rf /something_server/tmp/pids/server.pid
-RUN chmod +x start_server.sh
-ENTRYPOINT [ "./start_server.sh" ]
+CMD rm -f ./tmp/pids/server.pid; rails s -b 0.0.0.0
