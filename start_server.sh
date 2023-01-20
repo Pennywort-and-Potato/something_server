@@ -1,9 +1,8 @@
 #!/bin/sh
+set -e 
 
-set -e
-
-if [ -f tmp/pids/server.pid ]; then
-  rm tmp/pids/server.pid
+if [ -f "./tmp/pids/server.pid" ]; then 
+  rm "./tmp/pids/server.pid" 
 fi
 
-bundle exec rails s -b 0.0.0.0
+rails s -b 0.0.0.0
