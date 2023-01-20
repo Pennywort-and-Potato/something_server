@@ -7,4 +7,4 @@ COPY . .
 RUN rm -rf /something_server/tmp/pids/server.pid
 LABEL name="API" version="1.0"
 EXPOSE 4000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENTRYPOINT ["./start_server.sh"]
