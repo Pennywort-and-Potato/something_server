@@ -1,10 +1,11 @@
 FROM ruby:3.2.0-slim
+LABEL name="API" version="1.0"
+EXPOSE 4000
 RUN apt-get update && apt-get install -y build-essential libpq-dev nodejs
 WORKDIR /something_server
 COPY Gemfile* .
 RUN bundle install
 COPY . .
 RUN rm -rf /something_server/tmp/pids/server.pid
-LABEL name="API" version="1.0"
-EXPOSE 4000
-ENTRYPOINT ["./start_server.sh"]
+RUN chmod +x start_server.sh
+ENTRYPOINT [ "./start_server.sh" ]
