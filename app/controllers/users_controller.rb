@@ -1,14 +1,15 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
+  skip_before_action :authenticate_request, only: %i[ create ]
 
   def index
     @users = User.all
 
-    render json: @users
+    render json: @users.as_json(except: :password_digest)
   end
 
   def show
-      render json: @user
+      render json: @user.as_json(except: :password_digest)
   end
 
   def create
@@ -24,7 +25,7 @@ class UsersController < ApplicationController
     )
 
     if @user.save
-      render json: @user, status: :created
+      render json: @user.as_json(except: :password_digest), status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -32,7 +33,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(update_params)
-      render json: @user
+      render json: @user.as_json(except: :password_digest)
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -44,12 +45,10 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def user_params
       params.permit(:username, :first_name, :last_name, :date_of_birth, :email, :role, :is_deleted, :password)
     end

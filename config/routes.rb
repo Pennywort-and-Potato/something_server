@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   put "/users/update", to: "users#update"
 
   post "/login", to: "auth#login"
+  post "/register", to: "users#create"
 end
