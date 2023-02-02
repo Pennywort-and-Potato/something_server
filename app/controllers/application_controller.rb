@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     def authenticate_request
       header = request.headers["Authorization"]
       if request.headers["Authorization"] == nil
-        render json: {error: "Unauthorized", detail: "Missing Token"}, status: :unauthorized
+        render json: {error: "Unauthorized", status: :unauthorized, detail: "Missing Token"}
         return;
       end
       header = header.split(" ").last if header
