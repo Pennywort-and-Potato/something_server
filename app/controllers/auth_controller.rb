@@ -8,7 +8,7 @@ class AuthController < ApplicationController
       token = jwt_encode({id: @user[:id], email: @user[:email], role: @user[:role]})
       render json: {jwt: token}
     else
-      render json: {error: "Unauthorize", status: :unauthorized, detail: "Wrong username or password"}
+      render json: {error: "Unauthorize", detail: "Wrong username or password"}, status: :unauthorized
     end
   end
 
