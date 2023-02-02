@@ -1,32 +1,37 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
 
-  # GET /users
   def index
     @users = User.all
+
     render json: @users
   end
 
-  # GET /users/1
   def show
-    render json: @user
+      render json: @user
   end
 
-  # POST /users
   def create
-    puts user_params;
-    @user = User.new(user_params)
+    @user = User.new(
+      username: create_params[:username],
+      first_name: create_params[:first_name],
+      last_name: create_params[:last_name],
+      date_of_birth: create_params[:date_of_birth],
+      email: create_params[:email],
+      password: create_params[:password],
+      role: "member",
+      is_deleted: false
+    )
 
     if @user.save
-      render json: @user, status: :created, location: @user
+      render json: @user, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /users/1
   def update
-    if @user.update(user_params)
+    if @user.update(update_params)
       render json: @user
     else
       render json: @user.errors, status: :unprocessable_entity
@@ -46,6 +51,14 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.permit(:username, :password, :name, :email, :role)
+      params.permit(:username, :first_name, :last_name, :date_of_birth, :email, :role, :is_deleted, :password)
+    end
+
+    def create_params
+      params.permit(:username, :first_name, :last_name, :date_of_birth, :email, :password)
+    end
+
+    def update_params
+      params.permit(:username, :first_name, :last_name, :date_of_birth, :email, :password)
     end
 end

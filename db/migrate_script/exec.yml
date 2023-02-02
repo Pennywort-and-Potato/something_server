@@ -1,0 +1,2 @@
+20230202062640_create_users:
+  script: rails g scaffold User username:string first_name:string last_name:string date_of_birth:date email:string role:string is_deleted:boolean password:string
