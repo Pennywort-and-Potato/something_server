@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user.as_json(except: :password_digest), status: :created
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: {error: @user.errors, detail: "Create users fails, please try again!"}, status: :unprocessable_entity
     end
   end
 
