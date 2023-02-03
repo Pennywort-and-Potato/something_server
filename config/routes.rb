@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :posts
+  # resources :posts
   # User
   get "/users", to: "users#index"
   get "/users/get/:id", to: "users#show"
@@ -22,4 +22,11 @@ Rails.application.routes.draw do
   # Authenticate
   post "/login", to: "auth#login"
   post "/register", to: "users#create"
+
+  # NESTED
+  # resources :users do
+  #   resources :posts do
+  #     resources :contents
+  #   end
+  # end
 end

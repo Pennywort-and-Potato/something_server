@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_03_053630) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_03_071845) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,12 +19,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_053630) do
     t.string "alt"
     t.string "src"
     t.string "content_type"
-    t.bigint "view"
-    t.bigint "like"
-    t.bigint "dislike"
-    t.float "rating"
+    t.bigint "view", default: 0
+    t.bigint "like", default: 0
+    t.bigint "dislike", default: 0
+    t.float "rating", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_deleted", default: false
     t.index ["post_id"], name: "index_contents_on_post_id"
   end
 
@@ -32,12 +33,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_053630) do
     t.bigint "user_id"
     t.string "title"
     t.string "body"
-    t.bigint "view"
-    t.bigint "like"
-    t.bigint "dislike"
-    t.float "rating"
+    t.bigint "view", default: 0
+    t.bigint "like", default: 0
+    t.bigint "dislike", default: 0
+    t.float "rating", default: 0.0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_deleted", default: false
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -48,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_03_053630) do
     t.date "date_of_birth"
     t.string "email"
     t.string "role"
-    t.boolean "is_deleted"
+    t.boolean "is_deleted", default: false
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

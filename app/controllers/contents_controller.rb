@@ -15,16 +15,11 @@ class ContentsController < ApplicationController
 
   # POST /contents
   def create
-    puts params
     @content = Post.find(params[:post_id]).content.new(
       alt: content_params[:alt],
       src: content_params[:src],
       content_type: content_params[:content_type],
-      post_id: params[:post_id],
-      view: 0,
-      like: 0,
-      dislike: 0,
-      rating: 0
+      post_id: params[:post_id]
     )
 
     if @content.save

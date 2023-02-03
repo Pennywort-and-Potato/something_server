@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_request, only: %i[ create ]
 
   def index
-    @users = User.all
-
+    users = User.all
     render json: @users.as_json(except: :password_digest)
   end
 
@@ -13,7 +12,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(
+    user = User.new(
       username: create_params[:username],
       first_name: create_params[:first_name],
       last_name: create_params[:last_name],
@@ -21,13 +20,12 @@ class UsersController < ApplicationController
       email: create_params[:email],
       password: create_params[:password],
       role: "member",
-      is_deleted: false
     )
 
-    if @user.save
-      render json: @user.as_json(except: :password_digest), status: :created
+    if user.save
+      render json: user.as_json(except: :password_digest), status: :created
     else
-      render json: {error: @user.errors, detail: "Create user fails, please try again!"}, status: :unprocessable_entity
+      render json: {error: user.errors, detail: "Create user fails, please try again!"}, status: :unprocessable_entity
     end
   end
 
@@ -37,11 +35,6 @@ class UsersController < ApplicationController
     else
       render json: {error: @user.errors, detail: "Update user fails, please try again!"}, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /users/1
-  def destroy
-    @user.destroy
   end
 
   private

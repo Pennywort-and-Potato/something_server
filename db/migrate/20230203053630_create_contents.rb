@@ -5,10 +5,10 @@ class CreateContents < ActiveRecord::Migration[7.0]
       t.string :alt
       t.string :src
       t.string :content_type
-      t.bigint :view
-      t.bigint :like
-      t.bigint :dislike
-      t.float :rating
+      t.bigint :view, :default => 0
+      t.bigint :like, :default => 0
+      t.bigint :dislike, :default => 0
+      t.float :rating, :default => 0
 
       t.timestamps
     end

@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show update destroy ]
   before_action :set_user_posts, :set_current_user_posts, only: %i[ user_posts current_user_posts ]
+
   def index
     @posts = Post.all
     render json: @posts
@@ -11,33 +12,23 @@ class PostsController < ApplicationController
   end
 
   def create
-    # data = JSON.parse(request.raw_post)
-    puts params
-    @post = @current_user.post.new(
+    post = @current_user.post.new(
       title: params[:title],
-      body: params[:body],
-      like: 0,
-      dislike: 0,
-      view: 0,
-      rating: 0
+      body: params[:body]
     )
 
     params[:contents].each do |content|
-      @post.content.new(
+      post.content.new(
         alt: content[:alt],
         src: content[:src],
-        content_type: content[:content_type],
-        view: 0,
-        like: 0,
-        dislike: 0,
-        rating: 0
+        content_type: content[:content_type]
       )
     end
 
-    if @post.save
-      render json: @post, status: :created
+    if post.save
+      render json: post, status: :created
     else
-      render json: {error: @post.errors, detail: "Create post fails, please try again!"}, status: :unprocessable_entity
+      render json: {error: post.errors, detail: "Create post fails, please try again!"}, status: :unprocessable_entity
     end
   end
 
