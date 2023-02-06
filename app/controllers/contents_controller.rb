@@ -1,16 +1,25 @@
 class ContentsController < ApplicationController
   before_action :set_content, only: %i[ show update destroy ]
+  before_action :grant_admin_permission, only: %i[ index ]
 
   # GET /contents
   def index
     @contents = Content.all
 
-    render json: @contents
+    render json: {
+      data: @contents,
+      success: true
+    },
+    status: :ok
   end
 
   # GET /contents/1
   def show
-    render json: @content
+    render json: {
+      data: @content,
+      success: true
+    },
+    status: :ok
   end
 
   # POST /contents
@@ -23,18 +32,39 @@ class ContentsController < ApplicationController
     )
 
     if @content.save
-      render json: @content, status: :created
+      render json: {
+        data: @content
+        success: true
+      }, status: :created
     else
-      render json: {error: @content.errors, detail: "Create post content fails, please try again!"}, status: :unprocessable_entity
+      render json: {
+        error: @content.errors,
+        success: false
+      }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /contents/1
   def update
+    if @content.post[:user_id] != @current_user[:id] && !is_admin(@current_user)
+      return render json: {
+        error: "You dont have permission to access this resources",
+        success: false
+      },
+      status: :forbidden
+    end
+
     if @content.update(content_params)
-      render json: @content
+      render json: {
+        data: @content,
+        success: true
+      }
     else
-      render json: {error: @content.errors, detail: "Update post content fails, please try again!"}, status: :unprocessable_entity
+      render json: {
+        error: @content.errors,
+        success: false
+      },
+      status: :unprocessable_entity
     end
   end
 
@@ -42,9 +72,23 @@ class ContentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_content
       @content = Content.find(params[:id])
+
+      if @content[:is_deleted] && !is_admin(@current_user)
+        return render json: {
+          error: "Post not exist",
+          success: false
+        },
+        status: :not_found
+      end
+
+      rescue ActiveRecord::RecordNotFound
+        return render json: {
+          error: "Post not exist",
+          success: false
+        },
+        status: :not_found
     end
 
-    # Only allow a list of trusted parameters through.
     def content_params
       params.permit(:alt, :src, :content_type)
     end

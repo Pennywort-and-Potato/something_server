@@ -10,8 +10,7 @@ class ApplicationController < ActionController::API
       header = request.headers["Authorization"]
       if request.headers["Authorization"] == nil
         return render json: {
-          error: "Unauthorized",
-          detail: "Missing Token",
+          error: "Missing Token",
           success: false
         },
         status: :unauthorized
@@ -25,7 +24,6 @@ class ApplicationController < ActionController::API
       if @current_user[:is_deleted]
         return render json: {
           error: "User not exist",
-          detail: "Cannot find specific user" ,
           success: false
           },
         status: :not_found
@@ -34,7 +32,6 @@ class ApplicationController < ActionController::API
       rescue ActiveRecord::RecordNotFound
         return render json: {
           error: "User not exist",
-          detail: "Cannot find specific user",
           success: false
         },
         status: :not_found

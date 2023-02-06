@@ -15,9 +15,9 @@ module Helper
 
   def grant_admin_permission
     if !is_admin(@current_user)
-      render json: {
-        error: "Access Denied",
-        success: false, detail: "You dont have permission to access this resources"
+      return render json: {
+        error: "You dont have permission to access this resources",
+        success: false
       },
       status: :forbidden
     end

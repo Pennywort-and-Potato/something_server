@@ -14,8 +14,7 @@ class AuthController < ApplicationController
       status: :ok
     else
       render json: {
-        error: "Unauthorize",
-        detail: "Incorrect username or password",
+        error: "Incorrect username or password",
         success: false
       },
       status: :unauthorized
