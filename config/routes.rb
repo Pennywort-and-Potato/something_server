@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post "/users/create", to: "users#create"
   # put "/users/update", to: "users#update"
   delete "/users/delete", to: "users#destroy"
+  get "/users/me", to: "users#me"
   # Post
   get "/post/all", to: "posts#index"
   get "/post/get/:id", to: "posts#show"
@@ -22,7 +23,5 @@ Rails.application.routes.draw do
   # Authenticate
   post "/login", to: "auth#login"
   post "/register", to: "users#create"
-
-  get "/me", to: "users#me"
 
 end

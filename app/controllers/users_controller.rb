@@ -21,6 +21,15 @@ class UsersController < ApplicationController
   end
 
   def create
+
+    if !validate_password(create_params[:password])
+      return render json: {
+        success: false,
+        error: "Invalid password"
+      },
+      status: :bad_request
+    end
+
     user = User.new(
       username: create_params[:username],
       first_name: create_params[:first_name],
@@ -37,7 +46,12 @@ class UsersController < ApplicationController
         success: true
       },
       status: :created
-    else action_failed("Create", "user", user.errors, :unprocessable_entity)
+    else
+      render json: {
+        error: user.error,
+        success: false
+      },
+      status: :unprocessable_entity
     end
   end
 
@@ -69,11 +83,15 @@ class UsersController < ApplicationController
     if @user.save
       render json: {
         success: true,
-        detail: "Successful deleted user",
         # user: @user.as_json(except: :password_digest)
       },
       status: :ok
-    else action_failed("Delete", "user", @user.errors, :unprocessable_entity)
+    else
+      render json: {
+        error: user.errors,
+        success: false
+      },
+      status: :unprocessable_entity
     end
   end
 
@@ -93,7 +111,6 @@ class UsersController < ApplicationController
       if @user[:is_deleted] && !is_admin(@current_user)
         return render json: {
           error: "User not exist",
-          detail: "Cannot find specific user" ,
           success: false
         },
         status: :not_found
@@ -102,7 +119,6 @@ class UsersController < ApplicationController
       rescue ActiveRecord::RecordNotFound
         return render json: {
           error: "User not exist",
-          detail: "Cannot find specific user" ,
           success: false
         },
         status: :not_found

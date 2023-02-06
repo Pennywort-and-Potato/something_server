@@ -9,6 +9,10 @@ module Helper
     return user[:role] == "moderator" || user[:role] == "admin"
   end
 
+  def validate_password(password)
+    return password && password =~ /\A[a-zA-Z0-9]+\Z/
+  end
+
   def grant_admin_permission
     if !is_admin(@current_user)
       render json: {

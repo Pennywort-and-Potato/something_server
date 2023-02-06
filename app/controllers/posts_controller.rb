@@ -43,7 +43,6 @@ class PostsController < ApplicationController
     else
       render json: {
         error: post.errors,
-        detail: "Create post fails, please try again!",
         success: false
       },
       status: :unprocessable_entity
@@ -74,7 +73,6 @@ class PostsController < ApplicationController
       if @post[:is_deleted] && !is_admin(@current_user)
         return render json: {
           error: "Post not exist",
-          detail: "Cannot find specific post" ,
           success: false
         },
         status: :not_found
@@ -83,7 +81,7 @@ class PostsController < ApplicationController
       @post.update(view: @post[:view] + 1)
 
       rescue ActiveRecord::RecordNotFound
-        return render json: {error: "Post not exist", detail: "Cannot find specific post" , success: false}, status: :not_found
+        return render json: {error: "Post not exist", success: false}, status: :not_found
     end
 
     def set_user_posts
@@ -94,7 +92,7 @@ class PostsController < ApplicationController
       end
 
     rescue ActiveRecord::RecordNotFound
-      return render json: {error: "Post not exist", detail: "Cannot find specific post" , success: false}, status: :not_found
+      return render json: {error: "Post not exist", success: false}, status: :not_found
     end
 
     def set_current_user_posts
@@ -104,7 +102,7 @@ class PostsController < ApplicationController
       end
 
     rescue ActiveRecord::RecordNotFound
-      return render json: {error: "Post not exist", detail: "Cannot find specific post" , success: false}, status: :not_found
+      return render json: {error: "Post not exist", success: false}, status: :not_found
     end
 
     def post_params
