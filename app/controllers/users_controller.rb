@@ -4,11 +4,11 @@ class UsersController < ApplicationController
 
   def index
     users = User.all
-    render json: @users.as_json(except: :password_digest)
+    render json: {users: users.as_json(except: :password_digest), success: true}, status: :ok
   end
 
   def show
-      render json: @user.as_json(except: :password_digest)
+      render json: {user: @user.as_json(except: :password_digest), success: true}, status: :ok
   end
 
   def create
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     if user.save
       render json: user.as_json(except: :password_digest), status: :created
     else
-      render json: {error: user.errors, detail: "Create user fails, please try again!"}, status: :unprocessable_entity
+      render json: {error: user.errors, detail: "Create user fails, please try again!", success: false}, status: :unprocessable_entity
     end
   end
 
@@ -33,13 +33,15 @@ class UsersController < ApplicationController
     if @user.update(update_params)
       render json: @user.as_json(except: :password_digest)
     else
-      render json: {error: @user.errors, detail: "Update user fails, please try again!"}, status: :unprocessable_entity
+      render json: {error: @user.errors, detail: "Update user fails, please try again!", success: false}, status: :unprocessable_entity
     end
   end
 
   private
     def set_user
       @user = User.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        return render json: {error: "User not exist", detail: "Cannot find specific user" , success: false}, status: :not_found
     end
 
     def user_params
@@ -51,6 +53,6 @@ class UsersController < ApplicationController
     end
 
     def update_params
-      params.permit(:username, :first_name, :last_name, :date_of_birth, :email, :password)
+      params.permit(:username, :first_name, :last_name, :date_of_birth, :email)
     end
 end
