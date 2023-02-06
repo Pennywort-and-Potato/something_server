@@ -1,18 +1,18 @@
 Rails.application.routes.draw do
-  # resources :posts
   # User
-  get "/users", to: "users#index"
+  get "/users/all", to: "users#index"
   get "/users/get/:id", to: "users#show"
   post "/users/create", to: "users#create"
-  put "/users/update", to: "users#update"
+  # put "/users/update", to: "users#update"
+  delete "/users/delete", to: "users#destroy"
   # Post
-  get "/post", to: "posts#index"
+  get "/post/all", to: "posts#index"
   get "/post/get/:id", to: "posts#show"
   post "/post/create", to: "posts#create"
   put "/post/update", to: "posts#update"
 
-  get "/post/user", to: "posts#current_user_posts"
-  get "/post/user/:user_id", to: "posts#user_posts"
+  get "/post/user/all", to: "posts#current_user_posts"
+  get "/post/user/get/:user_id", to: "posts#user_posts"
 
   # Post Content
   get "/post/content/all", to: "contents#index"
@@ -23,10 +23,6 @@ Rails.application.routes.draw do
   post "/login", to: "auth#login"
   post "/register", to: "users#create"
 
-  # NESTED
-  # resources :users do
-  #   resources :posts do
-  #     resources :contents
-  #   end
-  # end
+  get "/me", to: "users#me"
+
 end
