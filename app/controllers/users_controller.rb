@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   def index
     users = User.all
     render json: {
-      users: users.as_json(except: :password_digest),
+      data: users.as_json(except: :password_digest),
       success: true
     },
     status: :ok
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   def show
       render json: {
-        user: @user.as_json(except: :password_digest),
+        data: @user.as_json(except: :password_digest),
         success: true
       },
       status: :ok
@@ -42,48 +42,52 @@ class UsersController < ApplicationController
 
     if user.save
       render json: {
-        user: user.as_json(except: :password_digest),
+        data: user.as_json(except: :password_digest),
         success: true
       },
       status: :created
     else
       render json: {
-        error: user.error,
+        error: user.errors,
         success: false
       },
       status: :unprocessable_entity
     end
   end
 
-  # def update
+  def update
+    if @user[:id] != @current_user[:id] && !is_admin(@current_user)
+      return render json: {
+        error: "Access Denied",
+        success: false, detail: "You dont have permission to access this resources"
+      },
+      status: :forbidden
+    end
 
-  #   if @user[:id] != @current_user[:id] && !is_admin(@current_user)
-  #     return render json: {
-  #       error: "Access Denied",
-  #       success: false, detail: "You dont have permission to access this resources"
-  #     },
-  #     status: :forbidden
-  #   end
+    if !@user.authenticate(params[:password])
+      return render json: {
+        error: "Invalid password",
+        success: false
+      },
+      status: :bad_request
+    end
 
-  #   if @user.update(update_params)
-  #     render json: {
-  #       user: @user.as_json(except: :password_digest),
-  #       success: true
-  #     },
-  #     status: :ok
-  #   else action_failed("Update", "user", @user.errors, :unprocessable_entity)
-  #   end
-  # end
+    if @user.update(update_params)
+      render json: {
+        data: @user.as_json(except: :password_digest),
+        success: true
+      },
+      status: :ok
+    else action_failed("Update", "user", @user.errors, :unprocessable_entity)
+    end
+  end
 
   def destroy
     @user.update(is_deleted: true)
 
-    puts @user
-
     if @user.save
       render json: {
-        success: true,
-        # user: @user.as_json(except: :password_digest)
+        success: true
       },
       status: :ok
     else
@@ -97,7 +101,7 @@ class UsersController < ApplicationController
 
   def me
     render json: {
-      user: @current_user.as_json(except: :password_digest),
+      data: @current_user.as_json(except: :password_digest),
       success: true
     },
     status: :ok

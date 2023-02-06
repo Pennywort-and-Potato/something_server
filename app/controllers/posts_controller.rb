@@ -6,7 +6,7 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
     render json: {
-      posts: @posts,
+      data: @posts,
       success: true
     },
     status: :ok
@@ -14,8 +14,8 @@ class PostsController < ApplicationController
 
   def show
     render json: {
-      post: @post,
-      success: false
+      data: @post,
+      success: true
     },
     status: :ok
   end
@@ -36,7 +36,7 @@ class PostsController < ApplicationController
 
     if post.save
       render json: {
-        post: post,
+        data: post,
         success: true
       },
       status: :created
@@ -49,21 +49,37 @@ class PostsController < ApplicationController
     end
   end
 
-  # def update
-  #   if @post.update(post_params)
-  #     render json: @post
-  #   else
-  #     render json: {error: @post.errors, detail: "Update post fails, please try again!", success: false}, status: :unprocessable_entity
-  #   end
-  # end
+  def update
+    if @post.update(post_params)
+      render json: {
+        data: @post,
+        success: true
+      },
+      status: :ok
+    else
+      render json: {
+        error: @post.errors,
+        success: false
+      },
+        status: :unprocessable_entity
+    end
+  end
 
-  # def user_posts
-  #   render json: {posts: @user_posts, success: true}, status: :ok
-  # end
+  def user_posts
+    render json: {
+      data: @user_posts,
+      success: true
+    },
+    status: :ok
+  end
 
-  # def current_user_posts
-  #   render json: {posts: @current_user_posts, success: true}, status: :ok
-  # end
+  def current_user_posts
+    render json: {
+      data: @current_user_posts,
+      success: true
+      },
+    status: :ok
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -103,6 +119,7 @@ class PostsController < ApplicationController
 
     rescue ActiveRecord::RecordNotFound
       return render json: {error: "Post not exist", success: false}, status: :not_found
+
     end
 
     def post_params
