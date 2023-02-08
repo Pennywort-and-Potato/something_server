@@ -40,6 +40,10 @@ class AdminController < ApplicationController
     status: :ok
   end
 
+  def get_post
+    
+  end
+
   private
 
     def set_all_user

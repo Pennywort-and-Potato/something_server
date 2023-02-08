@@ -23,18 +23,10 @@ class ApplicationController < ActionController::API
       @current_user = User.find(decoded[:id])
 
       if @current_user[:is_deleted]
-        return render json: {
-          error: "User not exist",
-          success: false
-          },
-        status: :not_found
+        return not_found("User")
       end
 
       rescue ActiveRecord::RecordNotFound
-        return render json: {
-          error: "User not exist",
-          success: false
-        },
-        status: :not_found
+        return not_found("User")
     end
 end

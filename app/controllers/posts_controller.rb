@@ -26,7 +26,7 @@ class PostsController < ApplicationController
 
     if post.save
       render json: {
-        data: post,
+        data: post.as_json(include: :content),
         success: true
       },
       status: :created
@@ -46,7 +46,7 @@ class PostsController < ApplicationController
 
     if @post.update(post_params)
       render json: {
-        data: @post,
+        data: @post.as_json(include: :content),
         success: true
       },
       status: :ok

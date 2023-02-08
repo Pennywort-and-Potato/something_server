@@ -68,6 +68,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    if !@user.authenticate(params[:password])
+      return render json: {
+        error: "Invalid password",
+        success: false
+      },
+      status: :bad_request
+    end
     @user.update(is_deleted: true)
 
     if @user.save
