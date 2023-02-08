@@ -4,5 +4,4 @@ WORKDIR /something_server
 COPY Gemfile* .
 RUN bundle install
 COPY . .
-RUN chmod +x ./docker/entrypoint.sh
-ENTRYPOINT exec ./docker/entrypoint.sh
+CMD rm -f ./tmp/pids/server.pid; rails db:create && rails db:migrate; rails s -p 4000 -b 0.0.0.0;
