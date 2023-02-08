@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "/" => redirect("https://github.com/Pennywort-and-Potato/something_server/blob/main/README.md")
   # User
   get "/user/get/:id", to: "users#show"
   post "/user/create", to: "users#create"
