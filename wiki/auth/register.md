@@ -10,7 +10,7 @@ or
 POST /users/create
 ```
 
-with body or params
+body:
 
 ```json
 {

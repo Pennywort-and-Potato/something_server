@@ -10,21 +10,25 @@ class ContentsController < ApplicationController
   end
 
   def create
-    @content = Post.find(params[:post_id]).content.new(
-      alt: content_params[:alt],
-      src: content_params[:src],
-      content_type: content_params[:content_type],
-      post_id: params[:post_id]
-    )
+    @post = Post.find(params[:post_id])
 
-    if @content.save
+    params[:contents].each do |content|
+      @post.content.new(
+        alt: content[:alt],
+        src: content[:src],
+        content_type: content[:content_type],
+        post_id: params[:post_id]
+      )
+    end
+
+    if @post.save
       render json: {
-        data: @content.as_json(include: :post),
+        data: @post.as_json(include: :content),
         success: true
       }, status: :created
     else
       render json: {
-        error: @content.errors,
+        error: @post.errors,
         success: false
       }, status: :unprocessable_entity
     end
