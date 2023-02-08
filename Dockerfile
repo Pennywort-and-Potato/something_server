@@ -4,5 +4,4 @@ WORKDIR /something_server
 COPY Gemfile* .
 RUN bundle install
 COPY . .
-# CMD rm -f ./tmp/pids/server.pid; rails db:create && rails db:migrate; rails s -b 0.0.0.0;
-ENTRYPOINT [ "sh", "./entrypoint/entry.sh" ]
+CMD rm -f ./tmp/pids/server.pid; rails db:create && rails db:migrate; rails s -p 4000 -b 0.0.0.0;
