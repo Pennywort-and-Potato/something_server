@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   include ActionController::Serialization
   include JwtAuth
   include Helper
+  include CommonResponse
 
   before_action :authenticate_request
 
