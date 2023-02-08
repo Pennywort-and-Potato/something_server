@@ -19,13 +19,19 @@ Using params or request body is both ok
 - PUT [/post/update](./wiki/post/updatePost.md)
 - GET [/post/me](./wiki/post/currentUserPost.md)
 - GET [/post/user/get/:user_id](./wiki/post/getUserPost.md)
+
 **POST CONTENT**
+
 - GET [/post/content/get/:id](./wiki/content/getContent.md)
 - POST [/post/content/add](./wiki/content/addContent.md)
+
 **AUTHENTICATE ENDPOINT**
+
 - POST [/login](./wiki/auth/login.md)
 - POST [/register](./wiki/auth/register.md)
+
 **ADMIN ENDPOINT**
+
 - GET [/admin/user/all]
 - GET [/admin/user/get/:id]
 - GET [/admin/post/all]
