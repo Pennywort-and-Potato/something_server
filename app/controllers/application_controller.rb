@@ -23,18 +23,10 @@ class ApplicationController < ActionController::API
       @current_user = User.find(decoded[:id])
 
       if @current_user[:is_deleted]
-        return json: {
-          error: "Cannot find user with given ID. Try login to get another token",
-          success: false
-        },
-        status: :unauthorized
+        return not_found("User")
       end
 
       rescue ActiveRecord::RecordNotFound
-        return json: {
-          error: "Cannot find user with given ID. Try login to get another token",
-          success: false
-        },
-        status: :unauthorized
+        return not_found("User")
     end
 end
