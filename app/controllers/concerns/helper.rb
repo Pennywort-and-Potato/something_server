@@ -13,7 +13,7 @@ module Helper
     return password && password =~ /\A[a-zA-Z0-9]+\Z/
   end
 
-  def grant_admin_permission
+  def validate_admin_permission
     if !is_admin(@current_user)
       return render json: {
         error: "You dont have permission to access this resources",

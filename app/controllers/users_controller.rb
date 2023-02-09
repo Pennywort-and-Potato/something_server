@@ -1,16 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
-  before_action :grant_admin_permission, only: %i[ index ]
   skip_before_action :authenticate_request, only: %i[ create ]
-
-  def index
-    users = User.all
-    render json: {
-      data: users.as_json(except: :password_digest),
-      success: true
-    },
-    status: :ok
-  end
 
   def show
       render json: {
@@ -21,7 +11,6 @@ class UsersController < ApplicationController
   end
 
   def create
-
     if !validate_password(create_params[:password])
       return render json: {
         success: false,
@@ -57,11 +46,7 @@ class UsersController < ApplicationController
 
   def update
     if @user[:id] != @current_user[:id] && !is_admin(@current_user)
-      return render json: {
-        error: "Access Denied",
-        success: false, detail: "You dont have permission to access this resources"
-      },
-      status: :forbidden
+      return forbidden()
     end
 
     if !@user.authenticate(params[:password])
@@ -83,6 +68,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    if !@user.authenticate(params[:password])
+      return render json: {
+        error: "Invalid password",
+        success: false
+      },
+      status: :bad_request
+    end
     @user.update(is_deleted: true)
 
     if @user.save
@@ -112,20 +104,12 @@ class UsersController < ApplicationController
     def set_user
       @user = User.find(params[:id])
 
-      if @user[:is_deleted] && !is_admin(@current_user)
-        return render json: {
-          error: "User not exist",
-          success: false
-        },
-        status: :not_found
+      if @user[:is_deleted]
+        return not_found("User")
       end
 
       rescue ActiveRecord::RecordNotFound
-        return render json: {
-          error: "User not exist",
-          success: false
-        },
-        status: :not_found
+        return not_found("User")
     end
 
     def user_params

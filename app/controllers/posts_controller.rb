@@ -1,20 +1,13 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show update destroy ]
-  before_action :set_user_posts, :set_current_user_posts, only: %i[ user_posts current_user_posts ]
-  before_action :grant_admin_permission, only: %i[ index ]
+  before_action :set_user_posts, :set_current_user_posts, only: %i[ current_user_posts ]
+  before_action :set_user_posts, only: [:user_posts]
+  skip_before_action :authenticate_request, only: [:user_posts]
 
-  def index
-    @posts = Post.all
-    render json: {
-      data: @posts,
-      success: true
-    },
-    status: :ok
-  end
 
   def show
     render json: {
-      data: @post,
+      data: @post.as_json(include: :content),
       success: true
     },
     status: :ok
@@ -36,7 +29,7 @@ class PostsController < ApplicationController
 
     if post.save
       render json: {
-        data: post,
+        data: post.as_json(include: :content),
         success: true
       },
       status: :created
@@ -50,9 +43,13 @@ class PostsController < ApplicationController
   end
 
   def update
+    if @post[:user_id] != @current_user[:id]
+      return forbidden()
+    end
+
     if @post.update(post_params)
       render json: {
-        data: @post,
+        data: @post.as_json(include: :content),
         success: true
       },
       status: :ok
@@ -61,13 +58,13 @@ class PostsController < ApplicationController
         error: @post.errors,
         success: false
       },
-        status: :unprocessable_entity
+      status: :unprocessable_entity
     end
   end
 
   def user_posts
     render json: {
-      data: @user_posts,
+      data: @user_posts.as_json(include: :content),
       success: true
     },
     status: :ok
@@ -75,29 +72,24 @@ class PostsController < ApplicationController
 
   def current_user_posts
     render json: {
-      data: @current_user_posts,
+      data: @current_user_posts.as_json(include: :content),
       success: true
       },
     status: :ok
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_post
-      @post = @current_user.post.find(params[:id])
+      @post = Post.find(params[:id])
 
-      if @post[:is_deleted] && !is_admin(@current_user)
-        return render json: {
-          error: "Post not exist",
-          success: false
-        },
-        status: :not_found
+      if @post[:is_deleted]
+        return not_found("Post")
       end
 
       @post.update(view: @post[:view] + 1)
 
       rescue ActiveRecord::RecordNotFound
-        return render json: {error: "Post not exist", success: false}, status: :not_found
+        return not_found("Post")
     end
 
     def set_user_posts
@@ -107,19 +99,19 @@ class PostsController < ApplicationController
         post.update(view: post[:view] + 1)
       end
 
-    rescue ActiveRecord::RecordNotFound
-      return render json: {error: "Post not exist", success: false}, status: :not_found
+      rescue ActiveRecord::RecordNotFound
+        return not_found("Post")
     end
 
     def set_current_user_posts
       @current_user_posts = Post.where(user_id: @current_user[:id])
+
       @current_user_posts.each do |post|
         post.update(view: post[:view] + 1)
       end
 
-    rescue ActiveRecord::RecordNotFound
-      return render json: {error: "Post not exist", success: false}, status: :not_found
-
+      rescue ActiveRecord::RecordNotFound
+        return not_found("Post")
     end
 
     def post_params

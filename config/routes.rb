@@ -1,18 +1,17 @@
 Rails.application.routes.draw do
+  get "/" => redirect("https://github.com/Pennywort-and-Potato/something_server/blob/main/README.md")
   # User
-  get "/users/all", to: "users#index"
-  get "/users/get/:id", to: "users#show"
-  post "/users/create", to: "users#create"
-  put "/users/update", to: "users#update"
-  delete "/users/delete", to: "users#destroy"
-  get "/users/me", to: "users#me"
+  get "/user/get/:id", to: "users#show"
+  post "/user/create", to: "users#create"
+  put "/user/update", to: "users#update"
+  delete "/user/delete", to: "users#destroy"
+  get "/user/me", to: "users#me"
   # Post
-  get "/post/all", to: "posts#index"
   get "/post/get/:id", to: "posts#show"
   post "/post/create", to: "posts#create"
   put "/post/update", to: "posts#update"
 
-  get "/post/user/all", to: "posts#current_user_posts"
+  get "/post/me", to: "posts#current_user_posts"
   get "/post/user/get/:user_id", to: "posts#user_posts"
 
   # Post Content
@@ -23,5 +22,12 @@ Rails.application.routes.draw do
   # Authenticate
   post "/login", to: "auth#login"
   post "/register", to: "users#create"
+  # Admin
+  get "/admin/user/all", to: "admin#all_user"
+  get "/admin/user/get/:id", to: "admin#get_user"
+
+  get "/admin/post/all", to: "admin#all_post"
+
+  get "/admin/post/content/all", to: "admin#all_content"
 
 end
