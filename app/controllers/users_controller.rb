@@ -19,15 +19,8 @@ class UsersController < ApplicationController
       status: :bad_request
     end
 
-    user = User.new(
-      username: create_params[:username],
-      first_name: create_params[:first_name],
-      last_name: create_params[:last_name],
-      date_of_birth: create_params[:date_of_birth],
-      email: create_params[:email],
-      password: create_params[:password],
-      role: "member",
-    )
+    create_params[:role] = "member"
+    user = User.new(create_params)
 
     if user.save
       render json: {
