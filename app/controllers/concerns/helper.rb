@@ -31,4 +31,13 @@ module Helper
     },
     status: status
   end
+
+  # THIS FUNTION MAKE EVERYTHING EXTREMELY SLOW. NEED TO BE FIX TO USE
+  def update_post_view_count(post)
+    post.update(view: post.view + 1)
+
+    post.content.each do |content|
+      content.update(view: content.view + 1)
+    end
+  end
 end
