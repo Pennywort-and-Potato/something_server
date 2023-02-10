@@ -1,4 +1,4 @@
-class PostsController < ApplicationController
+class V1::PostsController < ApplicationController
   before_action :set_post, only: %i[ show update destroy ]
   before_action :set_user_posts, :set_current_user_posts, only: %i[ current_user_posts ]
   before_action :set_user_posts, only: [:user_posts]
