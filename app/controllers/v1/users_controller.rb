@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class V1::UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
   skip_before_action :authenticate_request, only: %i[ create ]
 
@@ -56,7 +56,12 @@ class UsersController < ApplicationController
         success: true
       },
       status: :ok
-    else action_failed("Update", "user", @user.errors, :unprocessable_entity)
+    else 
+      render json: {
+        error: user.errors,
+        success: false
+      },
+      status: :unprocessable_entity
     end
   end
 
