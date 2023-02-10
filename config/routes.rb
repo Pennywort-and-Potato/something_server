@@ -31,7 +31,7 @@ Rails.application.routes.draw do
     get "/getPostByID/:id", to: "post#get_post_by_id"
     get "/getPostBy", to: "post#get_post_by"
     put "/updatePost", to: "post#update_post"
-    delete "deactivePost", to: "post#deactive_post"
+    delete "/deactivePost", to: "post#deactive_post"
   end
 
   post "/login", to: "authenticate/auth#login"
