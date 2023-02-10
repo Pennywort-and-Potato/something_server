@@ -10,6 +10,13 @@ class V2::UserController < ApplicationController
 
   def get_user_by
 
+    if find_user_params.empty?
+      return render json: {
+        error: "Missing Params",
+        success: false
+      }, status: :bad_request
+    end
+
     paramx = find_user_params.merge({is_deleted: false})
     user = User.where(paramx)
 
