@@ -10,7 +10,6 @@ gem "rails", "~> 7.0.4"
 gem "pg", "~> 1.1"
 
 gem 'jwt'
-gem "rspec-rails"
 gem "factory_bot"
 gem 'active_model_serializers'
 

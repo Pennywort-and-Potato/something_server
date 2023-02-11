@@ -1,4 +1,4 @@
-class AdminController < ApplicationController
+class Admin::AdminController < ApplicationController
   before_action :validate_admin_permission
 
   before_action :set_all_user, only: %i[ all_user ]

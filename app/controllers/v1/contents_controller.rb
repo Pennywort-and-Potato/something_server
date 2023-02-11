@@ -1,4 +1,4 @@
-class ContentsController < ApplicationController
+class V1::ContentsController < ApplicationController
   before_action :set_content, only: %i[ show update destroy ]
 
   def show
