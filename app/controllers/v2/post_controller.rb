@@ -11,9 +11,17 @@ class V2::PostController < ApplicationController
   end
 
   def get_post_by_user_id
+
+    chunk = params[:chunk] || 30
+    page = params[:page] && params[:page] - 1 || 0
+    offset = page * chunk
+
     posts = Post.includes(:content)
                 .where(content: {is_deleted: false})
                 .where(user_id: params[:user_id], is_deleted: false)
+                .order(id: :asc)
+                .limit(chunk)
+                .offset(offset)
 
     render json: {
       data: posts.as_json(include: :content),
@@ -75,6 +83,35 @@ class V2::PostController < ApplicationController
         error: @posts.error,
         success: false
       }, status: :unprocessable_entity
+    end
+  end
+
+  def create_post
+    post = @current_user.post.new(
+      title: params[:title],
+      body: params[:body]
+    )
+
+    params[:contents].each do |content|
+      post.content.new(
+        alt: content[:alt],
+        src: content[:src],
+        content_type: content[:content_type]
+      )
+    end
+
+    if post.save
+      render json: {
+        data: post.as_json(include: :content),
+        success: true
+      },
+      status: :created
+    else
+      render json: {
+        error: post.errors,
+        success: false
+      },
+      status: :unprocessable_entity
     end
   end
 
