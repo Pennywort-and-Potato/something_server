@@ -8,9 +8,17 @@ before_action :set_content, only: %i[ get_content_by_id deactive_content ]
   end
 
   def get_content_by_post_id
+
+    chunk = params[:chunk] || 30
+    page = params[:page] && params[:page] - 1 || 0
+    offset = page * chunk
+
     contents = Content.includes(:post)
                       .where(post: {is_deleted: false})
                       .where(post_id: params[:post_id])
+                      .order(id: :asc)
+                      .limit(chunk)
+                      .offset(offset)
     render json: {
       data: contents.as_json(include: :post),
       success: true
