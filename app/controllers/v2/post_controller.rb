@@ -1,6 +1,6 @@
 class V2::PostController < ApplicationController
   before_action :set_post
-  skip_before_action :set_post, only: %i[ get_post_by, get_post_by_user_id ]
+  skip_before_action :set_post, only: %i[ get_post_by get_post_by_user_id ]
 
   def get_post_by_id
     render json: {
