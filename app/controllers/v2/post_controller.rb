@@ -1,6 +1,6 @@
 class V2::PostController < ApplicationController
-  before_action :set_post
-  skip_before_action :set_post, only: %i[ get_post_by get_post_by_user_id ]
+  before_action :set_post, only: %i[ get_post_by_id update_post deactive_post ]
+  skip_before_action :authenticate_request, only: %i[ get_post_by_user_id ]
 
   def get_post_by_id
     render json: {
@@ -18,7 +18,7 @@ class V2::PostController < ApplicationController
 
     posts = Post.includes(:content)
                 .where(content: {is_deleted: false})
-                .where(user_id: params[:user_id], is_deleted: false)
+                .where(user_id: params[:id], is_deleted: false)
                 .order(id: :asc)
                 .limit(chunk)
                 .offset(offset)
