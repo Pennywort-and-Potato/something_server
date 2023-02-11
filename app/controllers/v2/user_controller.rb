@@ -1,5 +1,5 @@
 class V2::UserController < ApplicationController
-  before_action :set_user, only: %i[ get_user_by_id, update_user, deactive_user ]
+  before_action :set_user, only: %i[ get_user_by_id update_user deactive_user ]
 
   def get_user_by_id
     render json: {
