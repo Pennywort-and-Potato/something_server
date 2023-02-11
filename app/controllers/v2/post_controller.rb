@@ -23,18 +23,19 @@ class V2::PostController < ApplicationController
 
   def get_post_by
 
-    if find_post_params.empty?
-      return render json: {
-        error: "Missing Params",
-        success: false
-      }, status: :bad_request
-    end
-
     paramx = find_post_params.merge({is_deleted: false})
+
+    chunk = params[:chunk] || 30
+    page = params[:page] && params[:page] - 1 || 0
+    offset = page * chunk
+
 
     posts = Post.includes(:content)
                 .where(content: {is_deleted: false})
                 .where(paramx)
+                .order(id: :asc)
+                .limit(chunk)
+                .offset(offset)
 
     render json: {
       data: posts.as_json(include: :content),

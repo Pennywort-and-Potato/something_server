@@ -18,17 +18,19 @@ before_action :set_content, only: %i[ get_content_by_id deactive_content ]
   end
 
   def get_content_by
-    if find_content_params.empty?
-      return render json: {
-        error: "Missing Params",
-        success: false
-      }, status: :bad_request
-    end
 
     paramx = find_content_params.merge({is_deleted: false})
+
+    chunk = params[:chunk] || 30
+    page = params[:page] && params[:page] - 1 || 0
+    offset = page * chunk
+
     contents = Content.includes(:post)
                       .where(post: {is_deleted: false})
                       .where(find_content_params)
+                      .order(id: :asc)
+                      .limit(chunk)
+                      .offset(offset)
 
     render json: {
       data: contents.as_json(include: :post),
