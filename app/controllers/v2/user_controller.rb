@@ -10,18 +10,19 @@ class V2::UserController < ApplicationController
 
   def get_user_by
 
-    if find_user_params.empty?
-      return render json: {
-        error: "Missing Params",
-        success: false
-      }, status: :bad_request
-    end
+    chunk = params[:chunk] || 30
+    page = params[:page] && params[:page] - 1 || 0
+    offset = page * chunk
 
     paramx = find_user_params.merge({is_deleted: false})
+
     user = User.where(paramx)
+                .order(id: :asc)
+                .limit(chunk)
+                .offset(offset)
 
     render json: {
-      data: user.as_json(except: :password_digest),
+      data: user.as_json(except: [:password_digest, :email, :role]),
       success: true
     }, status: :ok
   end
