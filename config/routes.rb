@@ -39,6 +39,11 @@ Rails.application.routes.draw do
     get "/getContentByPostID/:post_id", to: "content#get_content_by_post_id"
     get "/getContentBy", to: "content#get_content_by"
     delete "/deactiveContent", to: "content#deactive_content"
+
+    get "/getCollectionByID/:id", to: "collection#get_collection_by_id"
+    get "/getCollectionBy", to: "collection#get_collection_by"
+    post "/createCollection", to: "collection#create_collection"
+    delete "/deactiveCollection", to: "collection#deactive_collection"
   end
 
   post "/login", to: "authenticate/auth#login"
