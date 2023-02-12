@@ -5,4 +5,5 @@ class User < ApplicationRecord
   # validates :password, presence: true
 
   has_many :post, dependent: :nullify
+  has_many :collection
 end
