@@ -1,6 +1,6 @@
 class V2::PostController < ApplicationController
   before_action :set_post, only: %i[ get_post_by_id update_post deactive_post ]
-  skip_before_action :authenticate_request, only: %i[ get_post_by_user_id get_post_by ]
+  skip_before_action :authenticate_request, only: %i[ get_post_by_user_id get_post_by get_post_by_id]
 
   def get_post_by_id
     render json: {
