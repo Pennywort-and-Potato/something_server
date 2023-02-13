@@ -80,7 +80,7 @@ class V2::UserController < ApplicationController
   def set_user
     @user = User.find(params[:id])
 
-    if user[:is_deleted]
+    if @user[:is_deleted]
       return not_found("User")
     end
 
