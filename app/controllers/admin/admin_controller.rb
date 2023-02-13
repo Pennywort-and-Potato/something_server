@@ -3,12 +3,11 @@ class Admin::AdminController < ApplicationController
 
   before_action :set_all_user, only: %i[ all_user ]
   before_action :set_user, only: %i[ get_user ]
+  before_action :set_post, only: %i[ get_post ]
+  before_action :set_content, only: %i[ get_content ]
 
-  before_action :set_all_post, only: %i[ all_post ]
-
-  before_action :set_all_content, only: %i[ all_content ]
-
-  def all_user
+  def get_all_user
+    @all_user = User.all
     render json: {
       data: @all_user.as_json(except: :password_digest),
       success: true
@@ -16,7 +15,8 @@ class Admin::AdminController < ApplicationController
     status: :ok
   end
 
-  def all_post
+  def get_all_post
+    @all_post = Post.all
     render json: {
       data: @all_post.as_json(include: :content),
       success: true
@@ -24,7 +24,8 @@ class Admin::AdminController < ApplicationController
     status: :ok
   end
 
-  def all_content
+  def get_all_content
+    @all_content = Content.all
     render json: {
       data: @all_content.as_json(include: :post),
       success: true
@@ -41,31 +42,27 @@ class Admin::AdminController < ApplicationController
   end
 
   def get_post
-    
+    render json: {
+      data: @post.as_json(include: :content),
+      success: true
+    },
+    status: :ok
+  end
+
+  def get_content
+    render json: {
+      data: @content.as_json(include: :post),
+      success: true
+    },
+    status: :ok
   end
 
   private
 
-    def set_all_user
-      @all_user = User.all
-    end
-
-    def set_all_post
-      @all_post = Post.includes(:content).all
-    end
-
-    def set_all_content
-      @all_content = Content.includes(:post).all
-    end
-
     def set_user
       @user = User.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        return render json: {
-          error: "User not exist",
-          success: false
-        },
-        status: :not_found
+        return not_found("User")
     end
 
     def set_post
