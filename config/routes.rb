@@ -51,12 +51,14 @@ Rails.application.routes.draw do
   get "/me", to: "authenticate/auth#me"
 
   namespace :admin do
-    get "/user/all", to: "admin#all_user"
-    get "/user/get/:id", to: "admin#get_user"
+    get "/getAllUser", to: "admin#get_all_user"
+    get "/getUser/:id", to: "admin#get_user"
 
-    get "/post/all", to: "admin#all_post"
+    get "/getAllPost", to: "admin#get_all_post"
+    get "/getPost/:id", to: "admin#get_post"
 
-    get "/post/content/all", to: "admin#all_content"
+    get "/getAllContent", to: "admin#get_all_content"
+    get "/getContent/:id", to: "admin#get_content"
   end
 
 end
