@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     post "/createPost", to: "post#create_post"
 
     get "/getContentByID/:id", to: "content#get_content_by_id"
-    get "/getContentByPostID/:post_id", to: "content#get_content_by_post_id"
+    get "/getContentByPostID/:id", to: "content#get_content_by_post_id"
     get "/getContentBy", to: "content#get_content_by"
     delete "/deactiveContent", to: "content#deactive_content"
 

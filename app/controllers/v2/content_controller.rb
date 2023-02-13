@@ -15,7 +15,7 @@ before_action :set_content, only: %i[ get_content_by_id deactive_content ]
 
     contents = Content.includes(:post)
                       .where(post: {is_deleted: false})
-                      .where(post_id: params[:post_id])
+                      .where(post_id: params[:id])
                       .order(id: :asc)
                       .limit(chunk)
                       .offset(offset)
