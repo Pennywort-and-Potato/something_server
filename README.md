@@ -27,32 +27,32 @@ Copy jwt, paste to Authorization header
 
 ### USER
 
-|METHOD|ENDPOINT|RESULT|RETURNS|
-|---|---|---|---|
-|GET|[/v2/getUserByID/:id](#getUserByID)|An User|[User](#User)|
-|GET|[/v2/getUserBy](#getUserBy)|An User Array|[User](#User)[]|
-|PUT/PATCH|[/v2/updateUser](#updateUser)|An User|[User](#User)|
-|DELETE|[/v2/deactiveUser](#deactiveUser)|An User|[User](#User)|
+|METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE|
+|---|---|---|---|---|
+|GET|[/v2/getUserByID/:id](#getUserByID)|An User|[User](#User)|:heavy_check_mark:|
+|GET|[/v2/getUserBy](#getUserBy)|An User Array|[User](#User)[]|:heavy_check_mark:|
+|PUT/PATCH|[/v2/updateUser](#updateUser)|An User|[User](#User)|:heavy_check_mark:|
+|DELETE|[/v2/deactiveUser](#deactiveUser)|An User|[User](#User)|:heavy_check_mark:|
 
 ### POST
 
-|METHOD|ENDPOINT|RESULT|RETURNS|
-|---|---|---|---|
+|METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE|
+|---|---|---|---|---|
 |GET|[/v2/getPostByID/:id](#getPostByID)|A Post|[Post](#Post)|
 |GET|[/v2/getPostByUserID/:id](#getPostByUserID)|A Post Array|[Post](#Post)[]|
 |GET|[/v2/getPostBy](#getPostBy)|A Post Array|[Post](#Post)[]|
-|PUT/PATCH|[/v2/updatePost](#updatePost)|A Post|[Post](#Post)|
-|DELETE|[/v2/deactivePost](#deactivePost)|A Post|[Post](#Post)|
-|POST|[/v2/createPost](#createPost)|A Post|[Post](#Post)|
+|PUT/PATCH|[/v2/updatePost](#updatePost)|A Post|[Post](#Post)|:heavy_check_mark:|
+|DELETE|[/v2/deactivePost](#deactivePost)|A Post|[Post](#Post)|:heavy_check_mark:|
+|POST|[/v2/createPost](#createPost)|A Post|[Post](#Post)|:heavy_check_mark:|
 
 ### CONTENT
 
-|METHOD|ENDPOINT|RESULT|RETURNS|
-|---|---|---|---|
+|METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE
+|---|---|---|---|---|
 |GET|[/v2/getContentByID/:id](#getContentByID)|A Content|[Content](#Content)|
 |GET|[/v2/getContentByPostID/:id](#getContentByPostID)|A Content Array|[Content](#Content)[]|
 |GET|[/v2/getContentBy](#getContentBy)|A Content Array|[Content](#Content)[]|
-|DELETE|[/v2/deactiveContent](#deactiveContent)|A Content|[Content](#Content)|
+|DELETE|[/v2/deactiveContent](#deactiveContent)|A Content|[Content](#Content)|:heavy_check_mark:|
 
 ### API REF
 

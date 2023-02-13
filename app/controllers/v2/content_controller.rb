@@ -1,5 +1,7 @@
 class V2::ContentController < ApplicationController
 before_action :set_content, only: %i[ get_content_by_id deactive_content ]
+skip_before_action :authenticate_request, only: %i[ get_content_by_id get_content_by_post_id get_content_by ]
+
   def get_content_by_id
     render json: {
       data: @content.as_json(include: :post),
