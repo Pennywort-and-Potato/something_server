@@ -23,8 +23,8 @@ class Authenticate::AuthController < ApplicationController
   end
 
   def register 
-    create_params[:role] = "member"
-    user = User.new(create_params)
+    register_params[:role] = "member"
+    user = User.new(register_params)
 
     if user.save
       render json: {
