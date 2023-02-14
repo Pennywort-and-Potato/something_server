@@ -25,7 +25,7 @@ Copy jwt, paste to Authorization header
 
 ## APIs
 
-### USER
+### USER API
 
 |METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE|
 |---|---|---|---|---|
@@ -34,7 +34,7 @@ Copy jwt, paste to Authorization header
 |PUT/PATCH|[/v2/updateUser](#updateUser)|An User|[User](#User)|:heavy_check_mark:|
 |DELETE|[/v2/deactiveUser](#deactiveUser)|An User|[User](#User)|:heavy_check_mark:|
 
-### POST
+### POST API
 
 |METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE|
 |---|---|---|---|---|
@@ -45,7 +45,7 @@ Copy jwt, paste to Authorization header
 |DELETE|[/v2/deactivePost](#deactivePost)|A Post|[Post](#Post)|:heavy_check_mark:|
 |POST|[/v2/createPost](#createPost)|A Post|[Post](#Post)|:heavy_check_mark:|
 
-### CONTENT
+### CONTENT API
 
 |METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE
 |---|---|---|---|---|
