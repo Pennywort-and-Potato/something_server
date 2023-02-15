@@ -17,9 +17,10 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: <%= ENV["DBH"] %>
-  username: <%= ENV["DBU"] %>
-  password: <%= ENV["DBP"] %>
+  host: <%= Rails.application.credentials.config[:DBH] %>
+  username: <%= Rails.application.credentials.config[:DBU] %>
+  password: <%= Rails.application.credentials.config[:DBP] %>
+
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
