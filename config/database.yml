@@ -15,11 +15,10 @@
 # gem "pg"
 #
 default: &default
-  adapter: <%= ENV["DBA"] %>
+  adapter: postgresql
   encoding: unicode
-  # host: <%= ENV["DBH"] %>
-  # port: <%= ENV["DBHP"] %>
-  # username: <%= ENV["DBU"] %>
+  host: <%= ENV["DBH"] %>
+  username: <%= ENV["DBU"] %>
   password: <%= ENV["DBP"] %>
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
