@@ -8,3 +8,5 @@ run:
 	rm -f ./tmp/pids/server.pid;
 	sudo ./bin/rails s -p 4000 -b 0.0.0.0;
 all: run
+create_database:
+	./bin/rails db:create
