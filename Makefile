@@ -1,5 +1,5 @@
 run:
-RAILS_ENV=production \
+	RAILS_ENV=production \
 	AUTH_SECRET=EMILIAIZDABEZT \
 	DATABASE_URL=postgres://rails:fwFPHTjVawEtwRtV@127.0.0.1 \
 	DBU=rails \
