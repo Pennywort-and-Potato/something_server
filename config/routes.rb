@@ -47,7 +47,7 @@ Rails.application.routes.draw do
   end
 
   post "/login", to: "authenticate/auth#login"
-  post "/register", to: "authenticate/auth#create"
+  post "/register", to: "authenticate/auth#register"
   get "/me", to: "authenticate/auth#me"
 
   namespace :admin do
