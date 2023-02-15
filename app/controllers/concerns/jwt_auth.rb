@@ -2,7 +2,7 @@ require 'jwt'
 
 module JwtAuth
   extend ActiveSupport::Concern
-  AUTH_SECRET = ENV["AUTH_SECRET"]
+  AUTH_SECRET = Rails.application.credentials.config[:AUTH_SECRET]
 
   def jwt_encode(payload, exp = 7.days.from_now)
     payload[:exp] = exp.to_i
