@@ -9,5 +9,5 @@ run:
 all: run
 create_database:
 	RAILS_ENV=production \
-	SECRET_KEY_BASE=CKftJ?faAb|5}t*u&E^G9rR@4J5+1o)'Az`C.NzFeq'J*QCvB6efzgRh)8Y45o~
+	SECRET_KEY_BASE=627D735E6934EA6D69F1B8C27E72C
 	 bin/rails db:create
