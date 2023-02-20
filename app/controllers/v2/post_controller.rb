@@ -38,12 +38,13 @@ class V2::PostController < ApplicationController
     offset = page * chunk
 
 
-    posts = Post.includes(:content)
-                .where(content: {is_deleted: false})
-                .where(paramx)
-                .order(id: :asc)
-                .limit(chunk)
-                .offset(offset)
+    posts = Post
+            .includes(:content)
+            .where({content: {is_deleted: false}, **paramx})
+            # .where(paramx)
+            .order(id: :asc)
+            .limit(chunk)
+            .offset(offset)
 
     render json: {
       data: posts.as_json(include: :content),
