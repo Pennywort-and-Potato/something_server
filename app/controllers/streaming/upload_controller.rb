@@ -13,7 +13,7 @@ class Streaming::UploadController < ApplicationController
     UploadPool.create({
       src: file_name,
       content_type: content_type,
-      alt: rand_uuid
+      # alt: rand_uuid
     })
 
     return render json: {
