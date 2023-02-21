@@ -44,9 +44,6 @@ Rails.application.routes.draw do
     get "/getCollectionBy", to: "collection#get_collection_by"
     post "/createCollection", to: "collection#create_collection"
     delete "/deactiveCollection", to: "collection#deactive_collection"
-
-    get "/getImage/:file_name", to: "streaming/image#send_image"
-    post "/uploadImage", to: "streaming/upload#upload_image"
   end
 
   post "/login", to: "authenticate/auth#login"
@@ -54,6 +51,10 @@ Rails.application.routes.draw do
   get "/me", to: "authenticate/auth#me"
 
 
+  scope :image do
+    get "/getImage/:file_name", to: "streaming/image#send_image"
+    post "/uploadImage", to: "streaming/upload#upload_image"
+  end
 
   namespace :admin do
     get "/getAllUser", to: "admin#get_all_user"
