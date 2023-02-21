@@ -52,8 +52,8 @@ Rails.application.routes.draw do
 
 
   scope :image do
-    get "/getImage/:file_name", to: "streaming/image#send_image"
-    post "/uploadImage", to: "streaming/upload#upload_image"
+    get "/get/:file_name", to: "streaming/image#send_image"
+    post "/upload", to: "streaming/upload#upload_image"
   end
 
   namespace :admin do

@@ -1,0 +1,2 @@
+class UploadPool < ApplicationRecord
+end
