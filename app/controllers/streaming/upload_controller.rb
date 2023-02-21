@@ -1,4 +1,4 @@
-class V2::Streaming::UploadController < ApplicationController
+class Streaming::UploadController < ApplicationController
   def upload_image
 
     file_name = "#{SecureRandom.uuid}.png"
