@@ -3,7 +3,7 @@ class Streaming::UploadController < ApplicationController
 
     file_extension = "webp"
     file_name = "#{SecureRandom.uuid}.#{file_extension}"
-    content_type = "images/#{file_extension}"
+    content_type = "image/#{file_extension}"
 
     File.open(Rails.root.join('public', 'images', file_name), "wb") do |f|
       f.write(request.body.read)
@@ -16,7 +16,7 @@ class Streaming::UploadController < ApplicationController
 
     return render json: {
       file_name: file_name,
-      content_type: "images/#{file_extension}",
+      content_type: content_type,
       success: true
     }, status: :ok
   end
