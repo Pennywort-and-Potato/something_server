@@ -16,8 +16,7 @@ skip_before_action :authenticate_request, only: %i[ get_content_by_id get_conten
     offset = page * chunk
 
     contents = Content.includes(:post)
-                      .where(post: {is_deleted: false})
-                      .where(post_id: params[:id])
+                      .where(post: {is_deleted: false, id: params[:id]})
                       .order(id: :asc)
                       .limit(chunk)
                       .offset(offset)

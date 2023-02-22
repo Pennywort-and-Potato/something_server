@@ -50,6 +50,12 @@ Rails.application.routes.draw do
   post "/register", to: "authenticate/auth#register"
   get "/me", to: "authenticate/auth#me"
 
+
+  scope :image do
+    get "/get/:file_name", to: "streaming/image#send_image"
+    post "/upload", to: "streaming/upload#upload_image"
+  end
+
   namespace :admin do
     get "/getAllUser", to: "admin#get_all_user"
     get "/getUser/:id", to: "admin#get_user"
