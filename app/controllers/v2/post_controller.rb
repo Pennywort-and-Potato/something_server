@@ -103,6 +103,8 @@ class V2::PostController < ApplicationController
         )
       end
 
+      post.thumbnail = post.content.first[:src]
+
       if post.save
         render json: {
           data: post.as_json(include: :content),
