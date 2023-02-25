@@ -6,7 +6,7 @@ Authorization:<TOKEN>
 Content-Type:application/json
 ```
 
-##### HOW TO GET TOKEN
+## HOW TO GET TOKEN
 
 ```R
 POST /login
@@ -24,6 +24,14 @@ BODY
 Copy jwt, paste to Authorization header
 
 ## APIs
+
+## AUTH APIs
+
+|METHOD|ENDPOINT|RESULT|RETURNS|TOKEN REQUIRE|
+|---|---|---|---|---|
+|POST|[/login](#login)|jwt + User|[Login Response](#LoginResponse)||
+|POST|[/register](#register)|An User|[Register Response](#RegisterResponse)||
+|GET|[/me](#me)|An User|[User](#User)|:heavy_check_mark:|
 
 ### USER API
 
@@ -54,9 +62,9 @@ Copy jwt, paste to Authorization header
 |GET|[/v2/getContentBy](#getContentBy)|A Content Array|[Content](#Content)[]|
 |DELETE|[/v2/deactiveContent](#deactiveContent)|A Content|[Content](#Content)|:heavy_check_mark:|
 
-### API REF
+## API REF
 
-#### /v2/deactiveContent
+### /v2/deactiveContent
 
 <a name="deactiveContent"></a>
 
@@ -93,7 +101,7 @@ RETURN
 }
 ```
 
-#### /v2/getContentBy
+### /v2/getContentBy
 
 <a name="getContentBy"></a>
 
@@ -150,7 +158,7 @@ RETURN
 }
 ```
 
-#### /v2/getContentByPostID/:id
+### /v2/getContentByPostID/:id
 
 <a name="getContentByPostID"></a>
 
@@ -204,7 +212,7 @@ RETURN
 }
 ```
 
-#### /v2/getContentByID/:id
+### /v2/getContentByID/:id
 
 <a name="getContentByID"></a>
 
@@ -247,7 +255,7 @@ RETURN
 }
 ```
 
-#### /v2/createPost
+### /v2/createPost
 
 <a name="createPost"></a>
 
@@ -304,7 +312,7 @@ RETURN
 }
 ```
 
-#### /v2/deactivePost
+### /v2/deactivePost
 
 <a name="deactivePost"></a>
 
@@ -341,7 +349,7 @@ RETURN
 }
 ```
 
-#### /v2/updatePost
+### /v2/updatePost
 
 <a name="updatePost"></a>
 
@@ -380,7 +388,7 @@ RETURN
 }
 ```
 
-#### /v2/getPostBy
+### /v2/getPostBy
 
 <a name="getPostBy"></a>
 
@@ -439,7 +447,7 @@ RETURN
 }
 ```
 
-#### /v2/getPostByUserID/:id
+### /v2/getPostByUserID/:id
 
 <a name="getPostByUserID"></a>
 
@@ -524,7 +532,7 @@ RETURN
 }
 ```
 
-#### /v2/getPostByID/:id
+### /v2/getPostByID/:id
 
 <a name="getPostByID"></a>
 
@@ -569,7 +577,7 @@ RETURN
 }
 ```
 
-#### /v2/getUserByID/:id
+### /v2/getUserByID/:id
 
 <a name="getUserByID"></a>
 
@@ -597,7 +605,7 @@ RETURN
 }
 ```
 
-#### /v2/getUserBy
+### /v2/getUserBy
 
 <a name="getUserBy"></a>
 
@@ -637,7 +645,7 @@ RETURN
 }
 ```
 
-#### /v2/updateUser
+### /v2/updateUser
 
 <a name="updateUser"></a>
 
@@ -678,7 +686,7 @@ RETURN
 }
 ```
 
-#### /v2/deactiveUser
+### /v2/deactiveUser
 
 <a name="deactiveUser"></a>
 
@@ -715,9 +723,34 @@ RETURN
 }
 ```
 
-### Model
+## Model
 
-#### User
+### Register Response
+
+<a name="RegisterResponse"></a>
+
+```Object
+{
+    {
+    data: User,
+    success: boolean
+}
+}
+```
+
+### Login Response
+
+<a name="LoginResponse"></a>
+
+```Object
+{
+    jwt: string,
+    success: boolean,
+    user: User
+}
+```
+
+### User
 
 <a name="User"></a>
 
@@ -734,7 +767,7 @@ RETURN
 }
 ```
 
-#### Post
+### Post
 
 <a name="Post"></a>
 
@@ -755,7 +788,7 @@ RETURN
 }
 ```
 
-#### Content
+### Content
 
 <a name="Content"></a>
 

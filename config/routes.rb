@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get "/" => redirect("https://github.com/Pennywort-and-Potato/something_server/blob/main/README.md")
+  get "/" => redirect("https://github.com/Pennywort-and-Potato/something_server/blob/main/wiki/wiki.md")
 
   namespace :v1 do
     # User
