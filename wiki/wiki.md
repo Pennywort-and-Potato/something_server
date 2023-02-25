@@ -62,3 +62,10 @@ Copy jwt, paste to Authorization header
 |GET|[/v2/getContentByPostID/:id](./endpoints/content/getContentByPostID.md)|NONE|[Content](./models.md#content)[]|
 |GET|[/v2/getContentBy](./endpoints/content/getContentBy.md)|[Find Content Payload](./payload.md#find-content-payload)|[Content](./models.md#content)[]|
 |DELETE|[/v2/deactiveContent](./endpoints/content/deactiveContent.md)|[Deactive Content Payload](./payload.md#deactive-content-payload)|[Content](./models.md#content)|:heavy_check_mark:|
+
+### IMAGE
+
+|METHOD|ENDPOINT|PAYLOAD|RETURNS|TOKEN REQUIRE|
+|---|---|---|---|---|
+|GET|[/image/get/:file_name](#)|NONE|[Image](#)||
+|POST|[/image/upload](#)|BINARY|[Upload Image Response](./response.md#upload-image-response)|:heavy_check_mark:|
