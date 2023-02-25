@@ -32,6 +32,7 @@
   created_at: date;
   updated_at: date;
   is_deleted: boolean;
+  thumbnail: string;
   content?: [Content]
 }
 ```
