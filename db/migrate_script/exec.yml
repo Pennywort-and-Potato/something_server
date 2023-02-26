@@ -1,6 +1,0 @@
-create_users:
-  script: rails g scaffold User username:string first_name:string last_name:string date_of_birth:date email:string role:string is_deleted:boolean password:string
-create_posts:
-  script: rails g scaffold Post title:string body:string view:bigint like:bigint dislike:bigint rating:float user_id:bigint
-create_contents:
-  script: rails g scaffold Content alt:string src:string content_type:string view:bigint like:bigint dislike:bigint rating:float post_id:bigint

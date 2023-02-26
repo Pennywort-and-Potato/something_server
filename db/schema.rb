@@ -10,15 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_25_135912) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_26_125522) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "SERVER_USERS", id: :bigint, default: nil, comment: "ALL SERVER USER AND PASSWORD", force: :cascade do |t|
-    t.text "username", null: false
-    t.text "password", null: false
-    t.text "desc"
-  end
 
   create_table "collection_contents", force: :cascade do |t|
     t.bigint "collection_id"
@@ -89,11 +83,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_135912) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "avatar"
   end
 
-  add_foreign_key "collection_contents", "collections"
-  add_foreign_key "collection_contents", "posts"
-  add_foreign_key "collections", "users"
-  add_foreign_key "contents", "posts"
-  add_foreign_key "posts", "users", on_delete: :cascade
+  add_foreign_key "collection_contents", "collections", :on_delete => :nullify
+  add_foreign_key "collection_contents", "posts", :on_delete => :nullify
+  add_foreign_key "collections", "users", :on_delete => :cascade
+  add_foreign_key "contents", "posts", :on_delete => :cascade
+  add_foreign_key "posts", "users", :on_delete => :cascade
 end
