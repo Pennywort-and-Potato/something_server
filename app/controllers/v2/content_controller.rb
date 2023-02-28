@@ -17,9 +17,7 @@ skip_before_action :authenticate_request, only: %i[ get_content_by_id get_conten
 
     contents = Content.includes(:post)
                       .where(post: {is_deleted: false, id: params[:id]})
-                      .order(id: :asc)
-                      .limit(chunk)
-                      .offset(offset)
+                      .order(id: :asc).limit(chunk).offset(offset)
     render json: {
       data: contents.as_json(include: :post),
       success: true
@@ -35,16 +33,18 @@ skip_before_action :authenticate_request, only: %i[ get_content_by_id get_conten
     offset = page * chunk
 
     contents = Content.includes(:post)
-                      .where(post: {is_deleted: false})
-                      .where(find_content_params)
-                      .order(id: :asc)
-                      .limit(chunk)
-                      .offset(offset)
+                      .where({post: {is_deleted: false}, **find_content_params})
+                      # .where(find_content_params)
+                      .order(id: :asc).limit(chunk).offset(offset)
 
     render json: {
       data: contents.as_json(include: :post),
       success: true
     }, status: :ok
+  end
+
+  def create_content 
+    
   end
 
   def deactive_content

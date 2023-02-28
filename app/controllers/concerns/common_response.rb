@@ -16,4 +16,12 @@ module CommonResponse
     },
     status: :forbidden
   end
+
+  def token_expired
+    return render json: {
+      error: "Access Token expired. Please re-login",
+      success: false
+    },
+    status: :unauthorized
+  end
 end
