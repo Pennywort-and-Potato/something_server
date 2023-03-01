@@ -33,7 +33,7 @@ class V2::TagController < ApplicationController
       if @tag[:is_deleted]
         return not_found("Tag")
       end
-      
+
       rescue ActiveRecord::RecordNotFound
         return not_found("Tag")
     end
