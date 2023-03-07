@@ -28,5 +28,7 @@ class ApplicationController < ActionController::API
 
       rescue ActiveRecord::RecordNotFound
         return not_found("User")
+      rescue TokenExpired
+        return token_expired()
     end
 end

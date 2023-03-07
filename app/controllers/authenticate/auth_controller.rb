@@ -22,7 +22,7 @@ class Authenticate::AuthController < ApplicationController
     end
   end
 
-  def register 
+  def register
     register_params[:role] = "member"
     user = User.new(register_params)
 

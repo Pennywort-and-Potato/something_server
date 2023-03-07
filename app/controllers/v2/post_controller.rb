@@ -103,6 +103,14 @@ class V2::PostController < ApplicationController
         )
       end
 
+      params[:tags].each do |tag|
+        tag = Tag.where(tag: tag[:tag]).first_or_create
+        post.post_tag.new(
+          post_id: post[:id],
+          tag_id: tag[:id]
+        )
+      end
+
       post.thumbnail = post.content.first[:src]
 
       if post.save

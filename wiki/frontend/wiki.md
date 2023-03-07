@@ -30,8 +30,8 @@ Copy jwt, paste to Authorization header
 
 |METHOD|ENDPOINT|PAYLOAD|RETURNS|TOKEN REQUIRE|
 |---|---|---|---|---|
-|POST|[/login](./endpoints/auth/login.md)|[Login Payload](./payload.md#login-payload)|[Login Response](#)||
-|POST|[/register](./endpoints/auth/register.md)|[Register Payload](./payload.md#register-payload)|[Register Response](#)||
+|POST|[/login](./endpoints/auth/login.md)|[Login Payload](./payload.md#login-payload)|[Login Response](./response.md#login-response)||
+|POST|[/register](./endpoints/auth/register.md)|[Register Payload](./payload.md#register-payload)|[Register Response](./response.md#register-response)||
 |GET|[/me](./endpoints/auth/me.md)||[User](./models.md#user)|:heavy_check_mark:|
 
 ### USER

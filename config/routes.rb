@@ -1,26 +1,32 @@
 Rails.application.routes.draw do
-  get "/" => redirect("https://github.com/Pennywort-and-Potato/something_server/blob/main/wiki/wiki.md")
+  get "/" => redirect("https://github.com/Pennywort-and-Potato/something_server/blob/main/README.md")
 
-  namespace :v1 do
-    # User
-    get "/user/get/:id", to: "users#show"
-    post "/user/create", to: "users#create"
-    put "/user/update", to: "users#update"
-    delete "/user/delete", to: "users#destroy"
-    get "/user/me", to: "users#me"
-    # Post
-    get "/post/get/:id", to: "posts#show"
-    post "/post/create", to: "posts#create"
-    put "/post/update", to: "posts#update"
+  scope :v1 do
 
-    get "/post/me", to: "posts#current_user_posts"
-    get "/post/user/get/:user_id", to: "posts#user_posts"
+    scope :user do
+      get "/get/:id", to: "v2/user#get_user_by_id"
+      get "/get", to: "v2/user#get_user_by"
+      put "/update", to: "v2/user#update_user"
+      delete "/delete", to: "v2/user#deactive_user"
+    end
 
-    # Post Content
-    get "/post/content/all", to: "contents#index"
-    get "/post/content/get/:id", to: "contents#show"
-    post "/post/content/add", to: "contents#create"
+    scope :post do
+      get "/get/:id", to: "v2/post#get_post_by_id"
+      get "/user/:id", to: "v2/post#get_post_by_user_id"
+      get "/get", to: "v2/post#get_post_by"
+      put "/update", to: "v2/post#update_post"
+      delete "/delete", to: "v2/post#deactive_post"
+      post "/create", to: "v2/post#create_post"
+    end
+
+    scope :content do
+      get "/get/:id", to: "v2/content#get_content_by_id"
+      get "/post/:id", to: "v2/content#get_content_by_post_id"
+      get "/get", to: "v2/content#get_content_by"
+      delete "/delete", to: "v2/content#deactive_content"
+    end
   end
+
 
   namespace :v2 do
     get "/getUserByID/:id", to: "user#get_user_by_id"
@@ -44,6 +50,9 @@ Rails.application.routes.draw do
     get "/getCollectionBy", to: "collection#get_collection_by"
     post "/createCollection", to: "collection#create_collection"
     delete "/deactiveCollection", to: "collection#deactive_collection"
+
+    post "/createTag", to: "tag#create_tag"
+    get "/getTag", to: "tag#get_tag"
   end
 
   post "/login", to: "authenticate/auth#login"
