@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
   include JwtAuth
   include Helper
   include CommonResponse
+  include Notification
 
   before_action :authenticate_request
 
@@ -21,6 +22,8 @@ class ApplicationController < ActionController::API
       decoded = jwt_decode(header)
 
       @current_user = User.find(decoded[:id])
+
+      MqttSocket.publish_all_connection(@current_user[:id])
 
       if @current_user[:is_deleted]
         return not_found("User")

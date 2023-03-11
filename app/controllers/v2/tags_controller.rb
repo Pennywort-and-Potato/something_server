@@ -6,24 +6,14 @@ class V2::TagController < ApplicationController
     tag = Tag.new(create_tag_params)
 
     if tag.save
-      render json: {
-        data: tag,
-        success: true
-      }, status: :ok
+      send_response(tag)
     else
-      render json: {
-        error: post.errors,
-        success: false
-      },
-      status: :unprocessable_entity
+      send_error(tag.errors, :unprocessable_entity)
     end
   end
 
   def get_tag
-    return render json: {
-      data: @tag,
-      success: true
-    }, status: :ok
+    send_response(@tag)
   end
 
   private
