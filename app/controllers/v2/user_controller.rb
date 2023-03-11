@@ -2,80 +2,47 @@ class V2::UserController < ApplicationController
   before_action :set_user, only: %i[ get_user_by_id update_user deactive_user ]
 
   def get_user_by_id
-    render json: {
-      data: @user.as_json(except: :password_digest),
-      success: true
-    }, status: :ok
+    send_response(@user.as_json(except: :password_digest))
   end
 
   def get_user_by
+    criteria = {**find_user_params, is_deleted: false}
+    query_limit = get_query_limit(params[:chunk], params[:page])
 
-    chunk = params[:chunk] || 30
-    page = params[:page] && params[:page] - 1 || 0
-    offset = page * chunk
+    users = get_user_by_criteria(criteria, query_limit[:chunk], query_limit[:offset])
 
-    paramx = find_user_params.merge({is_deleted: false})
-
-    user = User.where(paramx)
-                .order(id: :asc)
-                .limit(chunk)
-                .offset(offset)
-
-    render json: {
-      data: user.as_json(except: [:password_digest, :email, :role]),
-      success: true
-    }, status: :ok
+    send_response(users.as_json(except: [:password_digest, :email, :role]))
   end
 
   def update_user
-    if !@user.authenticate(params[:password])
-      return render json: {
-        error: "Invalid password",
-        success: false
-      },
-      status: :bad_request
-    end
+    check_user(@user, params[:password])
 
     if @user.update(update_params)
-      render json: {
-        data: @user.as_json(except: :password_digest),
-        success: true
-      },
-      status: :ok
+      send_response(@user.as_json(except: :password_digest))
     else
-      render json: {
-        error: user.errors,
-        success: false
-      },
-      status: :unprocessable_entity
+      send_error(@user.errors, :unprocessable_entity)
     end
   end
 
   def deactive_user
-    if !@user.authenticate(params[:password])
-      return render json: {
-        error: "Invalid password",
-        success: false
-      },
-      status: :bad_request
-    end
+    check_user(@user, params[:password])
 
     if @user.update(is_deleted: true)
-      render json: {
-        data: @user.as_json(except: :password_digest),
-        success: true
-      },
-      status: :ok
+      send_response(@user.as_json(except: :password_digest))
     else
-      render json: {
-        error: user.errors,
-        success: false
-      },
-      status: :unprocessable_entity
+      send_error(@user.errors, :unprocessable_entity)
     end
   end
 
   private
+
+  def get_user_by_criteria(criteria, chunk, offset)
+    users = User.where(criteria)
+      .order(id: :asc)
+      .limit(chunk)
+      .offset(offset)
+    return users
+  end
 
   def set_user
     @user = User.find(params[:id])

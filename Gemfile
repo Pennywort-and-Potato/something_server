@@ -12,6 +12,7 @@ gem "pg", "~> 1.1"
 gem 'jwt'
 gem "factory_bot"
 gem 'active_model_serializers'
+gem 'bunny'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", "~> 5.0"

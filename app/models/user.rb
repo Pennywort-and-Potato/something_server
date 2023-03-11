@@ -10,4 +10,5 @@ class User < ApplicationRecord
 
   has_many :post, dependent: :nullify
   has_many :collection
+  has_many :user_notification
 end

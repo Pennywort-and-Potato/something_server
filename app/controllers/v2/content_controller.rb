@@ -3,48 +3,40 @@ before_action :set_content, only: %i[ get_content_by_id deactive_content ]
 skip_before_action :authenticate_request, only: %i[ get_content_by_id get_content_by_post_id get_content_by ]
 
   def get_content_by_id
-    render json: {
-      data: @content.as_json(include: :post),
-      success: true
-    }, status: :ok
+    send_response(@content.as_json(include: :post))
   end
 
   def get_content_by_post_id
+    query_limit = get_query_limit(params[:chunk], params[:page])
+    criteria = {
+      post: {
+        is_deleted: false,
+        id: params[:id]
+      }
+    }
 
-    chunk = params[:chunk] || 30
-    page = params[:page] && params[:page] - 1 || 0
-    offset = page * chunk
+    contents = get_content_by_criteria(criteria, chunk, offset)
 
-    contents = Content.includes(:post)
-                      .where(post: {is_deleted: false, id: params[:id]})
-                      .order(id: :asc).limit(chunk).offset(offset)
-    render json: {
-      data: contents.as_json(include: :post),
-      success: true
-    }, status: :ok
+    send_response(contents.as_json(include: :post))
   end
 
   def get_content_by
+    query_limit = get_query_limit(params[:chunk], params[:page])
+    criteria = {
+      is_deleted: false,
+      post: {
+        is_deleted: false
+      },
+      **find_content_params
+    }
 
-    paramx = find_content_params.merge({is_deleted: false})
+    contents = get_content_by_criteria(criteria, chunk, offset)
 
-    chunk = params[:chunk] || 30
-    page = params[:page] && params[:page] - 1 || 0
-    offset = page * chunk
-
-    contents = Content.includes(:post)
-                      .where({post: {is_deleted: false}, **find_content_params})
-                      # .where(find_content_params)
-                      .order(id: :asc).limit(chunk).offset(offset)
-
-    render json: {
-      data: contents.as_json(include: :post),
-      success: true
-    }, status: :ok
+    send_response(contents.as_json(include: :post))
   end
 
-  def create_content 
-    
+  def create_content
+
   end
 
   def deactive_content
@@ -53,18 +45,22 @@ skip_before_action :authenticate_request, only: %i[ get_content_by_id get_conten
     end
 
     if @content.update(is_deleted: true)
-      render json: {
-        data: @content
-      }, status: :ok
+      send_response(@content)
     else
-      render json: {
-        error: @content.error,
-        success: false
-      }, status: :unprocessable_entity
+      send_error(@content.errors, :unprocessable_entity)
     end
   end
 
   private
+
+  def get_content_by_criteria(criteria, chunk, offset)
+    contents = Content.includes(:post)
+      .where(criteria)
+      .order(id: :asc)
+      .limit(chunk)
+      .offset(offset)
+    return contents
+  end
 
   def set_content
     @content = Content.find(params[:id])
