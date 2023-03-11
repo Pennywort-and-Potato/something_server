@@ -14,11 +14,10 @@ class Authenticate::AuthController < ApplicationController
         },
       status: :ok
     else
-      render json: {
+      send_error({
         error: "Incorrect username or password",
         success: false
-      },
-      status: :unauthorized
+      }, :unauthorized)
     end
   end
 
@@ -27,26 +26,14 @@ class Authenticate::AuthController < ApplicationController
     user = User.new(register_params)
 
     if user.save
-      render json: {
-        data: user.as_json(except: :password_digest),
-        success: true
-      },
-      status: :created
+      send_response(user.as_json(except: :password_digest), :created)
     else
-      render json: {
-        error: user.errors,
-        success: false
-      },
-      status: :unprocessable_entity
+      send_error(user.errors, :unprocessable_entity)
     end
   end
 
   def me
-    render json: {
-      data: @current_user.as_json(except: :password_digest),
-      success: true
-    },
-    status: :ok
+    send_response(@current_user.as_json(except: :password_digest))
   end
 
   private

@@ -9,54 +9,37 @@ class V2::CollectionController < ApplicationController
   end
 
   def get_collection_by
+    criteria = {**find_collection_params, is_deleted: false}
+    query_limit = get_query_limit(params[:chunk], params[:page])
 
-    chunk = params[:chunk] || 30
-    page = params[:page] && params[:page] - 1 || 0
-    offset = page * chunk
+    collections = get_collection_by_criteria(criteria, query_limit[:chunk], query_limit[:offset])
 
-    collections = Collection.where(find_collection_params)
-                            .order(id: :asc)
-                            .limit(chunk)
-                            .offset(offset)
-
-    render json: {
-      data: @collection,
-      success: true
-    }, status: :ok
+    send_response(@collection)
   end
 
   def create_collection
+    ActiveRecord::Base.transaction do
+      paramx = create_collection_params.merge({user_id: @current_user[:id]})
+      collection = Collection.new(paramx)
 
-    paramx = create_collection_params.merge({user_id: @current_user[:id]})
-    collection = Collection.new(paramx)
-
-    params[:post_ids].each do |post_id|
-      if !Post.exists?(id: post_id)
-        render json: {
-          error: "Post with id:[#{post_id}] not exist",
-          success: false
-        }, status: :bad_request
+      params[:post_ids].each do |post_id|
+        if !Post.exists?(id: post_id)
+          send_error("Post with id:[#{post_id}] not exist", :bad_request)
+        end
+        collection.collection_content.new(
+          post_id: post_id,
+          thumbnail: Content.where(post_id: post_id).first.src
+        )
       end
-      collection.collection_content.new(
-        post_id: post_id,
-        thumbnail: Content.where(post_id: post_id).first.src
-      )
+
+      collection[:thumbnail] = Content.where(post_id: params[:post_ids][0]).first.src
+
+      if collection.save
+        send_response(collection.as_json(include: :collection_content), :created)
+      else
+        send_error(collection.errors, :unprocessable_entity)
+      end
     end
-
-    collection[:thumbnail] = Content.where(post_id: params[:post_ids][0]).first.src
-
-    if collection.save
-      render json: {
-        data: collection.as_json(include: :collection_content),
-        success: true
-      }, status: :ok
-    else
-      render json: {
-        error: collection.errors,
-        success: false
-      }, status: :unprocessable_entity
-    end
-
   end
 
   def deactive_collection
@@ -65,19 +48,20 @@ class V2::CollectionController < ApplicationController
     end
 
     if @collection.update(is_deleted: true)
-      render json: {
-        data: @collection,
-        success: true
-      }, status: :ok
+      send_response(@collection)
     else
-      render json: {
-        error: @collection.error,
-        success: false
-      }, status: :unprocessable_entity
+      send_error(@collection.errors, :unprocessable_entity)
     end
   end
 
   private
+
+    def get_collection_by_criteria(criteria, chunk, offset)
+      collections = Collection.where(criteria)
+        .order(id: :asc)
+        .limit(chunk)
+        .offset(offset)
+    end
 
     def set_collection
       @collection = Collection.find(params[:id])

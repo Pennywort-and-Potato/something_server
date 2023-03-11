@@ -3,53 +3,37 @@ class V2::PostController < ApplicationController
   skip_before_action :authenticate_request, only: %i[ get_post_by_user_id get_post_by get_post_by_id]
 
   def get_post_by_id
-    render json: {
-      data: @post.as_json(include: :content),
-      success: true
-    },
-    status: :ok
+    send_response(@post.as_json(include: :content))
   end
 
   def get_post_by_user_id
+    query_limit = get_query_limit(params[:chunk], params[:page])
+    criteria = {
+      content: {
+        is_deleted: false
+      },
+      user_id: params[:id],
+      is_deleted: false
+    }
 
-    chunk = params[:chunk] || 30
-    page = params[:page] && params[:page] - 1 || 0
-    offset = page * chunk
+    posts = get_post_by_criteria(criteria, query_limit[:chunk], query_limit[:offset])
 
-    posts = Post.includes(:content)
-                .where(content: {is_deleted: false})
-                .where(user_id: params[:id], is_deleted: false)
-                .order(id: :asc)
-                .limit(chunk)
-                .offset(offset)
-
-    render json: {
-      data: posts.as_json(include: :content),
-      success: true
-    }, status: :ok
+    send_response(posts.as_json)
   end
 
   def get_post_by
+    query_limit = get_query_limit(params[:chunk], params[:page])
+    criteria = {
+      content: {
+        is_deleted: false
+      },
+      is_deleted: false,
+      **find_post_params
+    }
 
-    paramx = find_post_params.merge({is_deleted: false})
+    posts = get_post_by_criteria(criteria, query_limit[:chunk], query_limit[:offset])
 
-    chunk = params[:chunk] || 30
-    page = params[:page] && params[:page] - 1 || 0
-    offset = page * chunk
-
-
-    posts = Post
-            .includes(:content)
-            .where({content: {is_deleted: false}, **paramx})
-            # .where(paramx)
-            .order(id: :asc)
-            .limit(chunk)
-            .offset(offset)
-
-    render json: {
-      data: posts.as_json(include: :content),
-      success: true
-    }, status: :ok
+    send_response(posts.as_json)
   end
 
   def update_post
@@ -58,15 +42,9 @@ class V2::PostController < ApplicationController
     end
 
     if @post.update(update_post_params)
-      render json: {
-        data: @post,
-        success: true
-      }, status: :ok
+      send_response(@post.as_json)
     else
-      render json: {
-        error: @posts.error,
-        success: false
-      }, status: :unprocessable_entity
+      send_error(@post.errors, :unprocessable_entity)
     end
   end
 
@@ -76,14 +54,9 @@ class V2::PostController < ApplicationController
     end
 
     if @post.update(is_deleted: true)
-      render json: {
-        data: @post
-      }, status: :ok
+      send_response(@post.as_json)
     else
-      render json: {
-        error: @posts.error,
-        success: false
-      }, status: :unprocessable_entity
+      send_error(@post.errors, :unprocessable_entity)
     end
   end
 
@@ -112,24 +85,30 @@ class V2::PostController < ApplicationController
       end
 
       post.thumbnail = post.content.first[:src]
-
       if post.save
-        render json: {
-          data: post.as_json(include: :content),
-          success: true
-        },
-        status: :created
+
+        @current_user.user_notification.create({
+          body: "Post created",
+          is_read: false
+        })
+
+        send_notification(@current_user[:id], "post.created")
+        send_response(post.as_json(include: :content), :created)
       else
-        render json: {
-          error: post.errors,
-          success: false
-        },
-        status: :unprocessable_entity
+        send_error(post.errors, :unprocessable_entity)
       end
     end
   end
 
   private
+
+  def get_post_by_criteria(criteria, chunk, offset)
+    posts = Post.where(criteria)
+      .order(id: :asc)
+      .limit(chunk)
+      .offset(offset)
+    return posts
+  end
 
   def set_post
     @post = Post.find(params[:id])
