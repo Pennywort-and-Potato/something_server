@@ -103,7 +103,8 @@ class V2::PostController < ApplicationController
   private
 
   def get_post_by_criteria(criteria, chunk, offset)
-    posts = Post.where(criteria)
+    posts = Post.includes(:content)
+      .where(criteria)
       .order(id: :asc)
       .limit(chunk)
       .offset(offset)
