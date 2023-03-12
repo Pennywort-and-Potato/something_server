@@ -57,10 +57,6 @@ module Helper
     end
   end
 
-  def publish_all_exchange 
-    Publisher.publish('notification')
-  end
-
   # THIS FUNTION MAKE EVERYTHING EXTREMELY SLOW. NEED TO BE FIX TO USE
   def update_post_view_count(post)
     post.update(view: post.view + 1)
